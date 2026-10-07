@@ -1,0 +1,73 @@
+<div class="page-container">
+
+  <div class="page-header">
+    <button class="back-btn" (click)="goBack()">← Prenotazioni</button>
+    <h1>{{ isEditMode ? '✏️ Modifica Prenotazione' : '➕ Nuova Prenotazione' }}</h1>
+  </div>
+
+  <div *ngIf="isLoading" class="loading">Caricamento...</div>
+
+  <form *ngIf="!isLoading" (ngSubmit)="onSubmit()" class="form-card">
+
+    <div class="form-group cliente-search-wrapper">
+      <label for="clienteSearch">Cliente</label>
+
+      <div *ngIf="clienteSelezionato" class="cliente-selezionato">
+        <span>{{ clienteSelezionato.nome }} {{ clienteSelezionato.cognome }} — {{ clienteSelezionato.email }}</span>
+        <button type="button" class="btn-cambia" (click)="rimuoviClienteSelezionato()">Cambia</button>
+      </div>
+
+      <div *ngIf="!clienteSelezionato">
+        <input
+          id="clienteSearch"
+          type="text"
+          [(ngModel)]="clienteSearchQuery"
+          name="clienteSearch"
+          (ngModelChange)="onSearchChange()"
+          placeholder="Cerca per nome o cognome..."
+          autocomplete="off"
+        />
+
+        <ul *ngIf="risultatiRicerca.length > 0" class="risultati-ricerca">
+          <li *ngFor="let c of risultatiRicerca" (click)="selezionaCliente(c)">
+            {{ c.nome }} {{ c.cognome }} — {{ c.email }}
+          </li>
+        </ul>
+      </div>
+    </div>
+
+    <div class="form-group">
+      <label for="attrezzatura">Attrezzatura</label>
+      <select id="attrezzatura" [(ngModel)]="prenotazione.attrezzaturaId" name="attrezzaturaId" required>
+        <option [ngValue]="undefined" disabled>Seleziona un'attrezzatura</option>
+        <option *ngFor="let a of attrezzature" [ngValue]="a.id">
+          {{ a.nome }} ({{ a.tipo }}) — {{ a.stato }}
+        </option>
+      </select>
+    </div>
+
+    <div class="form-row">
+      <div class="form-group">
+        <label for="dataInizio">Data</label>
+        <input id="dataInizio" type="date" [(ngModel)]="prenotazione.dataInizio" name="dataInizio" required />
+      </div>
+
+      <div class="form-group">
+        <label for="oraInizio">Ora inizio</label>
+        <input id="oraInizio" type="time" [(ngModel)]="prenotazione.oraInizio" name="oraInizio" required />
+      </div>
+
+      <div class="form-group">
+        <label for="oraFine">Ora fine</label>
+        <input id="oraFine" type="time" [(ngModel)]="prenotazione.oraFine" name="oraFine" required />
+      </div>
+    </div>
+
+    <div class="error-message" *ngIf="errorMessage">{{ errorMessage }}</div>
+
+    <button type="submit" class="submit-btn">
+      {{ isEditMode ? 'Salva Modifiche' : 'Crea Prenotazione' }}
+    </button>
+  </form>
+
+</div>

@@ -1,0 +1,89 @@
+<div class="dashboard-container">
+
+  <!-- Navbar -->
+  <nav class="navbar">
+    <h1>🌅 Lido Sunset</h1>
+    <div class="user-info">
+      <span>👤 {{ username }}</span>
+      <span class="badge">{{ ruolo }}</span>
+      <button (click)="logout()">Logout</button>
+    </div>
+  </nav>
+
+  <!-- Contenuto -->
+  <main class="main-content">
+    <h2>Dashboard</h2>
+
+    <!-- Loading -->
+    <div *ngIf="isLoading" class="loading">
+      Caricamento dati...
+    </div>
+
+    <!-- Errore -->
+    <div *ngIf="errorMessage" class="error">
+      {{ errorMessage }}
+    </div>
+
+    <!-- Dati -->
+    <div *ngIf="dati && !isLoading" class="cards-grid">
+
+      <div class="card green">
+        <h3>💰 Incasso Prenotazioni</h3>
+        <p>€ {{ dati.incassoTotalePrenotazioni | number:'1.2-2' }}</p>
+      </div>
+
+      <div class="card blue">
+        <h3>🍽️ Incasso Ristorante</h3>
+        <p>€ {{ dati.incassoTotaleRistorante | number:'1.2-2' }}</p>
+      </div>
+
+      <div class="card red">
+        <h3>🛍️ Spese Ristorante</h3>
+        <p>€ {{ dati.totaleSpeseRistorante | number:'1.2-2' }}</p>
+      </div>
+
+      <div class="card red">
+        <h3>🛒 Spese Attrezzature</h3>
+        <p>€ {{ dati.totaleSpeseAttrezzature | number:'1.2-2' }}</p>
+      </div>
+
+      <div class="card red">
+        <h3>🔧 Spese Manutenzione</h3>
+        <p>€ {{ dati.totaleSpeseManutenzione | number:'1.2-2' }}</p>
+      </div>
+
+      <div class="card purple">
+        <h3>📊 Margine Netto</h3>
+        <p>€ {{ dati.margineNetto | number:'1.2-2' }}</p>
+      </div>
+
+      <div class="card orange">
+        <h3>🚤 Attrezzature Totali</h3>
+        <p>{{ dati.totaleAttrezzatura }}</p>
+      </div>
+
+      <div class="card" [class.red]="dati.manutenzioniUrgentiAttive > 0"
+           [class.green]="dati.manutenzioniUrgentiAttive === 0">
+        <h3>⚠️ Urgenze Aperte</h3>
+        <p>{{ dati.manutenzioniUrgentiAttive }}</p>
+      </div>
+
+    </div>
+
+    <!-- Menu navigazione -->
+    <div class="nav-menu">
+      <h3>Gestione</h3>
+      <div class="nav-grid">
+        <button (click)="navigateTo('/attrezzature')">🚤 Attrezzature</button>
+        <button (click)="navigateTo('/prenotazioni')">📅 Prenotazioni</button>
+        <button (click)="navigateTo('/manutenzioni')">🔧 Manutenzioni</button>
+        <button (click)="navigateTo('/fornitori')">🏭 Fornitori</button>
+        <button (click)="navigateTo('/clienti')">👥 Clienti</button>
+        <button (click)="navigateTo('/acquisti-attrezzature')">🛒 Acquisti Attrezzature</button>
+        <button (click)="navigateTo('/acquisti-ristorante')">🍽️ Acquisti Ristorante</button>
+        <button (click)="navigateTo('/vendite-ristorante')">💰 Vendite Ristorante</button>
+      </div>
+    </div>
+
+  </main>
+</div>

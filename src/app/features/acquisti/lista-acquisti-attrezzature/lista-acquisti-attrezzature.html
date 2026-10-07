@@ -1,0 +1,46 @@
+<div class="page-container">
+
+  <div class="page-header">
+    <button class="back-btn" (click)="goToDashboard()">← Dashboard</button>
+    <h1>🛒 Acquisti Attrezzature</h1>
+    <button class="new-btn" (click)="nuovoAcquisto()">+ Nuovo Acquisto</button>
+  </div>
+
+  <div *ngIf="isLoading" class="loading">Caricamento...</div>
+  <div *ngIf="errorMessage" class="error">{{ errorMessage }}</div>
+
+  <table *ngIf="!isLoading && acquisti.length > 0" class="table">
+    <thead>
+    <tr>
+      <th>Fornitore</th>
+      <th>Data ordine</th>
+      <th>Data ricezione</th>
+      <th>Totale</th>
+      <th>Stato</th>
+      <th>Righe</th>
+      <th>Azioni</th>
+    </tr>
+    </thead>
+    <tbody>
+    <tr *ngFor="let a of acquisti">
+      <td>{{ nomeFornitore(a.fornitoreId) }}</td>
+      <td>{{ a.dataOrdine }}</td>
+      <td>{{ a.dataRicezione || '—' }}</td>
+      <td>{{ a.prezzoTotale ? '€ ' + a.prezzoTotale : '—' }}</td>
+      <td>
+        <span class="badge" [ngClass]="statoClass(a.stato)">{{ a.stato }}</span>
+      </td>
+      <td>{{ a.righe?.length || 0 }}</td>
+      <td class="actions">
+        <button class="btn-edit" (click)="modifica(a.id)">Modifica</button>
+        <button class="btn-delete" (click)="elimina(a.id)">Elimina</button>
+      </td>
+    </tr>
+    </tbody>
+  </table>
+
+  <div *ngIf="!isLoading && acquisti.length === 0" class="empty">
+    Nessun acquisto presente.
+  </div>
+
+</div>

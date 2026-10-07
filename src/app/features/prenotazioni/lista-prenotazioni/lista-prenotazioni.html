@@ -1,0 +1,50 @@
+<div class="page-container">
+
+  <div class="page-header">
+    <button class="back-btn" (click)="goToDashboard()">← Dashboard</button>
+    <h1>📅 Prenotazioni</h1>
+    <button class="new-btn" (click)="nuovaPrenotazione()">+ Nuova Prenotazione</button>
+  </div>
+
+  <div *ngIf="isLoading" class="loading">Caricamento...</div>
+  <div *ngIf="errorMessage" class="error">{{ errorMessage }}</div>
+
+  <table *ngIf="!isLoading && prenotazioni.length > 0" class="table">
+    <thead>
+    <tr>
+      <th>Cliente</th>
+      <th>Attrezzatura</th>
+      <th>Data</th>
+      <th>Orario</th>
+      <th>Stato</th>
+      <th>Azioni</th>
+    </tr>
+    </thead>
+    <tbody>
+    <tr *ngFor="let p of prenotazioni">
+      <td>{{ p.nome }} {{ p.cognome }}</td>
+      <td>{{ p.attrezzaturaNome }}</td>
+      <td>{{ p.dataInizio }}</td>
+      <td>{{ p.oraInizio }} - {{ p.oraFine }}</td>
+      <td>
+        <span class="badge" [ngClass]="statoClass(p.stato)">{{ p.stato }}</span>
+      </td>
+      <td class="actions">
+        <button class="btn-edit" (click)="modifica(p.id)">Modifica</button>
+        <button
+          *ngIf="p.stato === StatoPrenotazione.ATTIVA"
+          class="btn-return"
+          (click)="restituisci(p.id)">
+          Restituisci
+        </button>
+        <button class="btn-delete" (click)="annulla(p.id)">Annulla</button>
+      </td>
+    </tr>
+    </tbody>
+  </table>
+
+  <div *ngIf="!isLoading && prenotazioni.length === 0" class="empty">
+    Nessuna prenotazione presente.
+  </div>
+
+</div>

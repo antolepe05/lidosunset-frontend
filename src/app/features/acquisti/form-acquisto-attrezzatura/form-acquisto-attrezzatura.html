@@ -1,0 +1,97 @@
+<div class="page-container">
+
+  <div class="page-header">
+    <button class="back-btn" (click)="goBack()">← Acquisti Attrezzature</button>
+    <h1>{{ isEditMode ? '✏️ Modifica Acquisto' : '➕ Nuovo Acquisto' }}</h1>
+  </div>
+
+  <div *ngIf="isLoading" class="loading">Caricamento...</div>
+
+  <form *ngIf="!isLoading" #acquistoForm="ngForm" (ngSubmit)="onSubmit()" class="form-card">
+
+    <div class="form-group">
+      <label for="fornitore">Fornitore</label>
+      <select id="fornitore" [(ngModel)]="acquisto.fornitoreId" name="fornitoreId" required>
+        <option [ngValue]="undefined" disabled>Seleziona un fornitore</option>
+        <option *ngFor="let f of fornitori" [ngValue]="f.id">{{ f.nome }}</option>
+      </select>
+    </div>
+
+    <div class="form-row">
+      <div class="form-group">
+        <label for="dataOrdine">Data ordine</label>
+        <input id="dataOrdine" type="date" [(ngModel)]="acquisto.dataOrdine" name="dataOrdine" required />
+      </div>
+
+      <div class="form-group">
+        <label for="dataRicezione">Data ricezione (opzionale)</label>
+        <input id="dataRicezione" type="date" [(ngModel)]="acquisto.dataRicezione" name="dataRicezione" />
+      </div>
+
+      <div class="form-group">
+        <label for="stato">Stato</label>
+        <select id="stato" [(ngModel)]="acquisto.stato" name="stato" required>
+          <option *ngFor="let s of stati" [value]="s">{{ s }}</option>
+        </select>
+      </div>
+    </div>
+
+    <h3 class="righe-title">Prodotti ordinati</h3>
+
+    <div class="riga-card" *ngFor="let riga of acquisto.righe; let i = index">
+      <div class="riga-header">
+        <span>Riga {{ i + 1 }}</span>
+        <button type="button" class="btn-remove-riga" (click)="rimuoviRiga(i)" *ngIf="acquisto.righe!.length > 1">✕</button>
+      </div>
+
+      <div class="form-row">
+        <div class="form-group">
+          <label>Tipo attrezzatura</label>
+          <select [(ngModel)]="riga.tipoAttrezzatura" name="tipo-{{i}}" required>
+            <option *ngFor="let t of tipi" [value]="t">{{ t }}</option>
+          </select>
+        </div>
+
+        <div class="form-group">
+          <label>Quantità</label>
+          <input type="number" min="1" [(ngModel)]="riga.quantita" name="quantita-{{i}}"
+                 (ngModelChange)="calcolaTotaleRiga(riga)" required />
+        </div>
+
+        <div class="form-group">
+          <label>Prezzo unitario (€)</label>
+          <input type="number" step="0.01" min="0" [(ngModel)]="riga.prezzoUnitario" name="prezzoUnitario-{{i}}"
+                 (ngModelChange)="calcolaTotaleRiga(riga)" required />
+        </div>
+
+        <div class="form-group">
+          <label>Totale riga</label>
+          <input type="text" [value]="'€ ' + riga.prezzoTotale" disabled />
+        </div>
+      </div>
+
+      <div class="form-group">
+        <label>Note (opzionale)</label>
+        <input type="text" [(ngModel)]="riga.note" name="note-{{i}}" />
+      </div>
+    </div>
+
+    <button type="button" class="btn-add-riga" (click)="aggiungiRiga()">+ Aggiungi prodotto</button>
+
+    <div class="totale-ordine">
+      Totale ordine: <strong>€ {{ acquisto.prezzoTotale }}</strong>
+    </div>
+
+    <div class="form-group">
+      <label for="noteOrdine">Note ordine (opzionale)</label>
+      <textarea id="noteOrdine" [(ngModel)]="acquisto.note" name="noteOrdine" rows="2"></textarea>
+    </div>
+
+    <div class="error-message" *ngIf="errorMessage">{{ errorMessage }}</div>
+
+    <button type="submit" class="submit-btn" [disabled]="acquistoForm.invalid">
+      {{ isEditMode ? 'Salva Modifiche' : 'Crea Acquisto' }}
+    </button>
+  </form>
+
+</div>

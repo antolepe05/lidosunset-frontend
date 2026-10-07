@@ -1,0 +1,46 @@
+<div class="page-container">
+
+  <div class="page-header">
+    <button class="back-btn" (click)="goToDashboard()">← Dashboard</button>
+    <h1>🔧 Manutenzioni</h1>
+    <button class="new-btn" (click)="nuovaManutenzione()">+ Nuova Manutenzione</button>
+  </div>
+
+  <div *ngIf="isLoading" class="loading">Caricamento...</div>
+  <div *ngIf="errorMessage" class="error">{{ errorMessage }}</div>
+
+  <table *ngIf="!isLoading && manutenzioni.length > 0" class="table">
+    <thead>
+    <tr>
+      <th>Attrezzatura</th>
+      <th>Data</th>
+      <th>Tipo</th>
+      <th>Descrizione</th>
+      <th>Costo</th>
+      <th>Completata</th>
+      <th>Azioni</th>
+    </tr>
+    </thead>
+    <tbody>
+    <tr *ngFor="let m of manutenzioni">
+      <td>{{ m.attrezzaturaNome }}</td>
+      <td>{{ m.data }}</td>
+      <td>
+        <span class="badge" [ngClass]="tipoClass(m.tipo)">{{ m.tipo }}</span>
+      </td>
+      <td>{{ m.descrizione }}</td>
+      <td>{{ m.costo ? '€ ' + m.costo : '—' }}</td>
+      <td>{{ m.completata ? '✅' : '⏳' }}</td>
+      <td class="actions">
+        <button class="btn-edit" (click)="modifica(m.id)">Modifica</button>
+        <button class="btn-delete" *ngIf="isAdmin()" (click)="elimina(m.id)">Elimina</button>
+      </td>
+    </tr>
+    </tbody>
+  </table>
+
+  <div *ngIf="!isLoading && manutenzioni.length === 0" class="empty">
+    Nessuna manutenzione presente.
+  </div>
+
+</div>

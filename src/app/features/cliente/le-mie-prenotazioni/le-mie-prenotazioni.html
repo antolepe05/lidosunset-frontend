@@ -1,0 +1,52 @@
+<div class="page-container">
+
+  <nav class="navbar">
+    <h1>🌅 Lido Sunset</h1>
+    <div class="user-info">
+      <span>👤 {{ username }}</span>
+      <span class="badge">CLIENTE</span>
+      <button (click)="logout()">Logout</button>
+    </div>
+  </nav>
+
+  <div class="page-header">
+    <h2>📅 Le Mie Prenotazioni</h2>
+    <button class="new-btn" (click)="nuovaPrenotazione()">+ Nuova Prenotazione</button>
+  </div>
+
+  <div *ngIf="isLoading" class="loading">Caricamento...</div>
+  <div *ngIf="errorMessage" class="error">{{ errorMessage }}</div>
+
+  <table *ngIf="!isLoading && prenotazioni.length > 0" class="table">
+    <thead>
+    <tr>
+      <th>Attrezzatura</th>
+      <th>Data</th>
+      <th>Orario</th>
+      <th>Prezzo</th>
+      <th>Stato</th>
+      <th>Azioni</th>
+    </tr>
+    </thead>
+    <tbody>
+    <tr *ngFor="let p of prenotazioni">
+      <td>{{ p.attrezzaturaNome }}</td>
+      <td>{{ p.dataInizio }}</td>
+      <td>{{ p.oraInizio }} - {{ p.oraFine }}</td>
+      <td>€ {{ p.prezzo }}</td>
+      <td>
+        <span class="badge" [ngClass]="statoClass(p.stato)">{{ p.stato }}</span>
+      </td>
+      <td class="actions">
+        <button class="btn-edit" *ngIf="p.stato === StatoPrenotazione.ATTIVA" (click)="modifica(p.id)">Modifica</button>
+        <button class="btn-delete" *ngIf="p.stato === StatoPrenotazione.ATTIVA" (click)="annulla(p.id)">Annulla</button>
+      </td>
+    </tr>
+    </tbody>
+  </table>
+
+  <div *ngIf="!isLoading && prenotazioni.length === 0" class="empty">
+    Non hai ancora nessuna prenotazione. Creane una!
+  </div>
+
+</div>

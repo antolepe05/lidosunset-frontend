@@ -1,0 +1,55 @@
+<div class="page-container">
+
+  <div class="page-header">
+    <button class="back-btn" (click)="goBack()">← Fornitori</button>
+    <h1>{{ isEditMode ? '✏️ Modifica Fornitore' : '➕ Nuovo Fornitore' }}</h1>
+  </div>
+
+  <div *ngIf="isLoading" class="loading">Caricamento...</div>
+
+  <form *ngIf="!isLoading" #fornitoreForm="ngForm" (ngSubmit)="onSubmit()" class="form-card">
+
+    <div class="form-group">
+      <label for="nome">Nome</label>
+      <input id="nome" type="text" [(ngModel)]="fornitore.nome" name="nome" required />
+    </div>
+
+    <div class="form-row">
+      <div class="form-group">
+        <label for="partitaIva">Partita IVA</label>
+        <input id="partitaIva" type="text" [(ngModel)]="fornitore.partitaIva" name="partitaIva" required />
+      </div>
+
+      <div class="form-group">
+        <label for="settore">Settore</label>
+        <select id="settore" [(ngModel)]="fornitore.settore" name="settore" required>
+          <option *ngFor="let s of settori" [value]="s">{{ s }}</option>
+        </select>
+      </div>
+    </div>
+
+    <div class="form-row">
+      <div class="form-group">
+        <label for="email">Email</label>
+        <input id="email" type="email" [(ngModel)]="fornitore.email" name="email" required />
+      </div>
+
+      <div class="form-group">
+        <label for="telefono">Telefono (opzionale)</label>
+        <input id="telefono" type="text" [(ngModel)]="fornitore.telefono" name="telefono" />
+      </div>
+    </div>
+
+    <div class="form-group">
+      <label for="indirizzo">Indirizzo (opzionale)</label>
+      <input id="indirizzo" type="text" [(ngModel)]="fornitore.indirizzo" name="indirizzo" />
+    </div>
+
+    <div class="error-message" *ngIf="errorMessage">{{ errorMessage }}</div>
+
+    <button type="submit" class="submit-btn" [disabled]="fornitoreForm.invalid">
+      {{ isEditMode ? 'Salva Modifiche' : 'Crea Fornitore' }}
+    </button>
+  </form>
+
+</div>

@@ -1,0 +1,65 @@
+<div class="page-container">
+
+  <div class="page-header">
+    <button class="back-btn" (click)="goBack()">← Manutenzioni</button>
+    <h1>{{ isEditMode ? '✏️ Modifica Manutenzione' : '➕ Nuova Manutenzione' }}</h1>
+  </div>
+
+  <div *ngIf="isLoading" class="loading">Caricamento...</div>
+
+  <form *ngIf="!isLoading" #manutenzioneForm="ngForm" (ngSubmit)="onSubmit()" class="form-card">
+
+    <div class="form-group">
+      <label for="attrezzatura">Attrezzatura</label>
+      <select id="attrezzatura" [(ngModel)]="manutenzione.attrezzaturaId" name="attrezzaturaId" required>
+        <option [ngValue]="undefined" disabled>Seleziona un'attrezzatura</option>
+        <option *ngFor="let a of attrezzature" [ngValue]="a.id">
+          {{ a.nome }} ({{ a.tipo }})
+        </option>
+      </select>
+    </div>
+
+    <div class="form-row">
+      <div class="form-group">
+        <label for="data">Data</label>
+        <input id="data" type="date" [(ngModel)]="manutenzione.data" name="data" required />
+      </div>
+
+      <div class="form-group">
+        <label for="tipo">Tipo</label>
+        <select id="tipo" [(ngModel)]="manutenzione.tipo" name="tipo" required>
+          <option *ngFor="let t of tipi" [value]="t">{{ t }}</option>
+        </select>
+      </div>
+
+      <div class="form-group">
+        <label for="costo">Costo (€)</label>
+        <input id="costo" type="number" step="0.01" [(ngModel)]="manutenzione.costo" name="costo" />
+      </div>
+    </div>
+
+    <div class="form-group">
+      <label for="descrizione">Descrizione</label>
+      <input id="descrizione" type="text" [(ngModel)]="manutenzione.descrizione" name="descrizione" required />
+    </div>
+
+    <div class="form-group">
+      <label for="note">Note (opzionale)</label>
+      <textarea id="note" [(ngModel)]="manutenzione.note" name="note" rows="3"></textarea>
+    </div>
+
+    <div class="form-group checkbox-group">
+      <label>
+        <input type="checkbox" [(ngModel)]="manutenzione.completata" name="completata" />
+        Manutenzione completata
+      </label>
+    </div>
+
+    <div class="error-message" *ngIf="errorMessage">{{ errorMessage }}</div>
+
+    <button type="submit" class="submit-btn" [disabled]="manutenzioneForm.invalid">
+      {{ isEditMode ? 'Salva Modifiche' : 'Crea Manutenzione' }}
+    </button>
+  </form>
+
+</div>

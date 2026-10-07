@@ -1,0 +1,40 @@
+<div class="page-container">
+
+  <div class="page-header">
+    <button class="back-btn" (click)="goToDashboard()">← Dashboard</button>
+    <h1>👥 Clienti</h1>
+    <button class="new-btn" *ngIf="isAdmin()" (click)="nuovoCliente()">+ Nuovo Cliente</button>
+  </div>
+
+  <div *ngIf="isLoading" class="loading">Caricamento...</div>
+  <div *ngIf="errorMessage" class="error">{{ errorMessage }}</div>
+
+  <table *ngIf="!isLoading && clienti.length > 0" class="table">
+    <thead>
+    <tr>
+      <th>Nome</th>
+      <th>Cognome</th>
+      <th>Email</th>
+      <th>Telefono</th>
+      <th *ngIf="isAdmin()">Azioni</th>
+    </tr>
+    </thead>
+    <tbody>
+    <tr *ngFor="let c of clienti">
+      <td>{{ c.nome }}</td>
+      <td>{{ c.cognome }}</td>
+      <td>{{ c.email }}</td>
+      <td>{{ c.telefono || '—' }}</td>
+      <td class="actions" *ngIf="isAdmin()">
+        <button class="btn-edit" (click)="modifica(c.id)">Modifica</button>
+        <button class="btn-delete" (click)="elimina(c.id)">Disattiva</button>
+      </td>
+    </tr>
+    </tbody>
+  </table>
+
+  <div *ngIf="!isLoading && clienti.length === 0" class="empty">
+    Nessun cliente presente.
+  </div>
+
+</div>

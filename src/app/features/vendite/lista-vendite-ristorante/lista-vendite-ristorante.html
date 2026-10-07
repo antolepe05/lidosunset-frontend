@@ -1,0 +1,45 @@
+<div class="page-container">
+
+  <div class="page-header">
+    <button class="back-btn" (click)="goToDashboard()">← Dashboard</button>
+    <h1>💰 Vendite Ristorante</h1>
+    <button class="new-btn" (click)="nuovaVendita()">+ Nuova Vendita</button>
+  </div>
+
+  <div *ngIf="isLoading" class="loading">Caricamento...</div>
+  <div *ngIf="errorMessage" class="error">{{ errorMessage }}</div>
+
+  <table *ngIf="!isLoading && vendite.length > 0" class="table">
+    <thead>
+    <tr>
+      <th>Data</th>
+      <th>Totale</th>
+      <th>Note</th>
+      <th>Azioni</th>
+    </tr>
+    </thead>
+    <tbody>
+    <tr *ngFor="let v of vendite">
+      <td>{{ v.data }}</td>
+      <td>€ {{ v.totale }}</td>
+      <td>{{ v.note || '—' }}</td>
+      <td class="actions">
+        <button class="btn-edit" (click)="modifica(v.id)">Modifica</button>
+        <button class="btn-delete" (click)="elimina(v.id)">Elimina</button>
+      </td>
+    </tr>
+    </tbody>
+    <tfoot>
+    <tr>
+      <td><strong>Totale complessivo</strong></td>
+      <td><strong>€ {{ totaleComplessivo() }}</strong></td>
+      <td colspan="2"></td>
+    </tr>
+    </tfoot>
+  </table>
+
+  <div *ngIf="!isLoading && vendite.length === 0" class="empty">
+    Nessuna vendita registrata.
+  </div>
+
+</div>

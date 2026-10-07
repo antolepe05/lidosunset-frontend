@@ -1,0 +1,48 @@
+<div class="page-container">
+
+  <div class="page-header">
+    <button class="back-btn" (click)="goBack()">← Prenotazioni</button>
+    <h1>↩️ Registra Restituzione</h1>
+  </div>
+
+  <div *ngIf="isLoading" class="loading">Caricamento...</div>
+  <div *ngIf="errorMessage" class="error">{{ errorMessage }}</div>
+
+  <div *ngIf="!isLoading && prenotazione" class="info-card">
+    <p><strong>Cliente:</strong> {{ prenotazione.nome }} {{ prenotazione.cognome }}</p>
+    <p><strong>Attrezzatura:</strong> {{ prenotazione.attrezzaturaNome }}</p>
+    <p><strong>Prenotata per:</strong> {{ prenotazione.dataInizio }} dalle {{ prenotazione.oraInizio }} alle {{ prenotazione.oraFine }}</p>
+  </div>
+
+  <form *ngIf="!isLoading && prenotazione" #restituzioneForm="ngForm" (ngSubmit)="onSubmit()" class="form-card">
+
+    <div class="form-row">
+      <div class="form-group">
+        <label for="data">Data restituzione</label>
+        <input id="data" type="date" [(ngModel)]="restituzione.data" name="data" required />
+      </div>
+
+      <div class="form-group">
+        <label for="ora">Ora restituzione</label>
+        <input id="ora" type="time" [(ngModel)]="restituzione.ora" name="ora" required />
+      </div>
+    </div>
+
+    <div class="form-group checkbox-group">
+      <label>
+        <input type="checkbox" [(ngModel)]="restituzione.danni" name="danni" />
+        L'attrezzatura presenta danni
+      </label>
+    </div>
+
+    <div class="form-group" *ngIf="restituzione.danni">
+      <label for="descrizioneDanni">Descrizione danni</label>
+      <textarea id="descrizioneDanni" [(ngModel)]="restituzione.descrizioneDanni" name="descrizioneDanni" rows="3" required></textarea>
+    </div>
+
+    <div class="error-message" *ngIf="errorMessage">{{ errorMessage }}</div>
+
+    <button type="submit" class="submit-btn" [disabled]="restituzioneForm.invalid">Conferma Restituzione</button>
+  </form>
+
+</div>

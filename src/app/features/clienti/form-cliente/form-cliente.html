@@ -1,0 +1,60 @@
+<div class="page-container">
+
+  <div class="page-header">
+    <button class="back-btn" (click)="goBack()">← Clienti</button>
+    <h1>{{ isEditMode ? '✏️ Modifica Cliente' : '➕ Nuovo Cliente' }}</h1>
+  </div>
+
+  <div *ngIf="isLoading" class="loading">Caricamento...</div>
+
+  <form *ngIf="!isLoading" #clienteForm="ngForm" (ngSubmit)="onSubmit()" class="form-card">
+
+    <div class="form-row">
+      <div class="form-group">
+        <label for="nome">Nome</label>
+        <input id="nome" type="text" [(ngModel)]="cliente.nome" name="nome" required />
+      </div>
+
+      <div class="form-group">
+        <label for="cognome">Cognome</label>
+        <input id="cognome" type="text" [(ngModel)]="cliente.cognome" name="cognome" required />
+      </div>
+    </div>
+
+    <div class="form-group">
+      <label for="email">Email</label>
+      <input id="email" type="email" [(ngModel)]="cliente.email" name="email" required />
+    </div>
+
+    <div class="form-group">
+      <label for="telefono">Telefono (opzionale)</label>
+      <input id="telefono" type="text" [(ngModel)]="cliente.telefono" name="telefono" />
+    </div>
+
+    <div class="form-group checkbox-group" *ngIf="!isEditMode">
+      <label class="checkbox-label">
+        <input type="checkbox" [(ngModel)]="creaAccesso" name="creaAccesso" />
+        Crea anche le credenziali di accesso per questo cliente
+      </label>
+    </div>
+
+    <div class="form-row" *ngIf="!isEditMode && creaAccesso">
+      <div class="form-group">
+        <label for="username">Username</label>
+        <input id="username" type="text" [(ngModel)]="username" name="username" required />
+      </div>
+
+      <div class="form-group">
+        <label for="password">Password</label>
+        <input id="password" type="password" [(ngModel)]="password" name="password" required minlength="6" />
+      </div>
+    </div>
+
+    <div class="error-message" *ngIf="errorMessage">{{ errorMessage }}</div>
+
+    <button type="submit" class="submit-btn" [disabled]="clienteForm.invalid">
+      {{ isEditMode ? 'Salva Modifiche' : (creaAccesso ? 'Crea Cliente e Account' : 'Crea Cliente') }}
+    </button>
+  </form>
+
+</div>

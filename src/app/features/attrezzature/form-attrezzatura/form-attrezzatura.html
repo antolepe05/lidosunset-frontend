@@ -1,0 +1,45 @@
+<div class="page-container">
+
+  <div class="page-header">
+    <button class="back-btn" (click)="goBack()">← Attrezzature</button>
+    <h1>{{ isEditMode ? '✏️ Modifica Attrezzatura' : '➕ Nuova Attrezzatura' }}</h1>
+  </div>
+
+  <div *ngIf="isLoading" class="loading">Caricamento...</div>
+
+  <form *ngIf="!isLoading" #attrezzaturaForm="ngForm" (ngSubmit)="onSubmit()" class="form-card">
+
+    <div class="form-group">
+      <label for="nome">Nome</label>
+      <input id="nome" type="text" [(ngModel)]="attrezzatura.nome" name="nome" required />
+    </div>
+
+    <div class="form-row">
+      <div class="form-group">
+        <label for="tipo">Tipo</label>
+        <select id="tipo" [(ngModel)]="attrezzatura.tipo" name="tipo" required>
+          <option *ngFor="let t of tipi" [value]="t">{{ t }}</option>
+        </select>
+      </div>
+
+      <div class="form-group">
+        <label for="stato">Stato</label>
+        <select id="stato" [(ngModel)]="attrezzatura.stato" name="stato" required>
+          <option *ngFor="let s of stati" [value]="s">{{ s }}</option>
+        </select>
+      </div>
+    </div>
+
+    <div class="form-group">
+      <label for="descrizione">Descrizione (opzionale)</label>
+      <textarea id="descrizione" [(ngModel)]="attrezzatura.descrizione" name="descrizione" rows="3"></textarea>
+    </div>
+
+    <div class="error-message" *ngIf="errorMessage">{{ errorMessage }}</div>
+
+    <button type="submit" class="submit-btn" [disabled]="attrezzaturaForm.invalid">
+      {{ isEditMode ? 'Salva Modifiche' : 'Crea Attrezzatura' }}
+    </button>
+  </form>
+
+</div>

@@ -1,0 +1,44 @@
+<div class="page-container">
+
+  <div class="page-header">
+    <button class="back-btn" (click)="goToDashboard()">← Dashboard</button>
+    <h1>🏭 Fornitori</h1>
+    <button class="new-btn" (click)="nuovoFornitore()">+ Nuovo Fornitore</button>
+  </div>
+
+  <div *ngIf="isLoading" class="loading">Caricamento...</div>
+  <div *ngIf="errorMessage" class="error">{{ errorMessage }}</div>
+
+  <table *ngIf="!isLoading && fornitori.length > 0" class="table">
+    <thead>
+    <tr>
+      <th>Nome</th>
+      <th>P.IVA</th>
+      <th>Settore</th>
+      <th>Email</th>
+      <th>Telefono</th>
+      <th>Azioni</th>
+    </tr>
+    </thead>
+    <tbody>
+    <tr *ngFor="let f of fornitori">
+      <td>{{ f.nome }}</td>
+      <td>{{ f.partitaIva }}</td>
+      <td>
+        <span class="badge" [ngClass]="settoreClass(f.settore)">{{ f.settore }}</span>
+      </td>
+      <td>{{ f.email }}</td>
+      <td>{{ f.telefono || '—' }}</td>
+      <td class="actions">
+        <button class="btn-edit" (click)="modifica(f.id)">Modifica</button>
+        <button class="btn-delete" (click)="elimina(f.id)">Elimina</button>
+      </td>
+    </tr>
+    </tbody>
+  </table>
+
+  <div *ngIf="!isLoading && fornitori.length === 0" class="empty">
+    Nessun fornitore presente.
+  </div>
+
+</div>

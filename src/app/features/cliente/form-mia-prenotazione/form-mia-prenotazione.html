@@ -1,0 +1,57 @@
+<div class="page-container">
+
+  <div class="page-header">
+    <button class="back-btn" (click)="goBack()">← Le Mie Prenotazioni</button>
+    <h1>{{ isEditMode ? '✏️ Modifica Prenotazione' : '➕ Nuova Prenotazione' }}</h1>
+  </div>
+
+  <div *ngIf="isLoading" class="loading">Caricamento...</div>
+
+  <form *ngIf="!isLoading" #prenotazioneForm="ngForm" (ngSubmit)="onSubmit()" class="form-card">
+
+    <div class="form-group">
+      <label for="tipo">Cosa vuoi prenotare?</label>
+      <select id="tipo" [(ngModel)]="selectedTipo" name="tipo" (ngModelChange)="onTipoChange()" required>
+        <option [ngValue]="undefined" disabled>Seleziona un tipo</option>
+        <option *ngFor="let t of tipi" [value]="t">{{ t }}</option>
+      </select>
+    </div>
+
+    <div class="form-group" *ngIf="selectedTipo">
+      <label for="attrezzatura">Attrezzatura</label>
+      <select id="attrezzatura" [(ngModel)]="prenotazione.attrezzaturaId" name="attrezzaturaId" required>
+        <option [ngValue]="undefined" disabled>Seleziona un'attrezzatura</option>
+        <option *ngFor="let a of attrezzatureDisponibili" [ngValue]="a.id">
+          {{ a.nome }}{{ a.descrizione ? ' — ' + a.descrizione : '' }}
+        </option>
+      </select>
+      <p class="hint" *ngIf="attrezzatureDisponibili.length === 0">Nessuna attrezzatura di questo tipo trovata.</p>
+    </div>
+
+    <div class="form-row">
+      <div class="form-group">
+        <label for="dataInizio">Data</label>
+        <input id="dataInizio" type="date" [(ngModel)]="prenotazione.dataInizio" name="dataInizio" required />
+      </div>
+
+      <div class="form-group">
+        <label for="oraInizio">Ora inizio</label>
+        <input id="oraInizio" type="time" [(ngModel)]="prenotazione.oraInizio" name="oraInizio" required />
+      </div>
+
+      <div class="form-group">
+        <label for="oraFine">Ora fine</label>
+        <input id="oraFine" type="time" [(ngModel)]="prenotazione.oraFine" name="oraFine" required />
+      </div>
+    </div>
+
+    <p class="hint">Gli orari devono essere espressi in multipli di 10 minuti (es. 10:00, 10:10, 10:20...).</p>
+
+    <div class="error-message" *ngIf="errorMessage">{{ errorMessage }}</div>
+
+    <button type="submit" class="submit-btn" [disabled]="prenotazioneForm.invalid">
+      {{ isEditMode ? 'Salva Modifiche' : 'Prenota' }}
+    </button>
+  </form>
+
+</div>

@@ -1,0 +1,42 @@
+<div class="page-container">
+
+  <div class="page-header">
+    <button class="back-btn" (click)="goToDashboard()">← Dashboard</button>
+    <h1>🚤 Attrezzature</h1>
+    <button class="new-btn" (click)="nuovaAttrezzatura()">+ Nuova Attrezzatura</button>
+  </div>
+
+  <div *ngIf="isLoading" class="loading">Caricamento...</div>
+  <div *ngIf="errorMessage" class="error">{{ errorMessage }}</div>
+
+  <table *ngIf="!isLoading && attrezzature.length > 0" class="table">
+    <thead>
+    <tr>
+      <th>Nome</th>
+      <th>Tipo</th>
+      <th>Stato</th>
+      <th>Descrizione</th>
+      <th>Azioni</th>
+    </tr>
+    </thead>
+    <tbody>
+    <tr *ngFor="let a of attrezzature">
+      <td>{{ a.nome }}</td>
+      <td>{{ a.tipo }}</td>
+      <td>
+        <span class="badge" [ngClass]="statoClass(a.stato)">{{ a.stato }}</span>
+      </td>
+      <td>{{ a.descrizione || '—' }}</td>
+      <td class="actions">
+        <button class="btn-edit" (click)="modifica(a.id)">Modifica</button>
+        <button class="btn-delete" (click)="elimina(a.id)">Elimina</button>
+      </td>
+    </tr>
+    </tbody>
+  </table>
+
+  <div *ngIf="!isLoading && attrezzature.length === 0" class="empty">
+    Nessuna attrezzatura presente.
+  </div>
+
+</div>
